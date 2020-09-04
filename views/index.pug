@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+  body.index
+    block content
+      div.home
+        p#header Welcome to #{title}
+        br
+        form(action="/chat", method="POST")
+          input(name="userid", type="username", placeholder="Enter your username")
+          br
+          input(name="userpwd", type="password", placeholder="Enter your password")
+          br
+          input(type="submit", value="Login")
+        p#link If you do not have an account, follow this link to register an account.
+        a(href="http://localhost:3000/register") Register

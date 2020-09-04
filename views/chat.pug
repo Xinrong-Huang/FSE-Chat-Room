@@ -1,0 +1,77 @@
+extends layout
+
+block content
+  
+  div.chat
+    p#header Welcome to #{title}
+    div#messages
+    input#msg(name="msg", type="message", placeholder="Enter your message")
+    br
+    input(type="submit", onclick='sendMessage(' + ')', value="Submit", style="margin-right:15em")
+    a(href="http://localhost:3000/") Leave
+    br
+
+  script(src="/socket.io/socket.io.js")
+  script(src="/jquery/jquery.js")
+  script.
+    var server = "http://localhost:3000";
+    var socket = io(server);
+
+    socket.on('broadcast', function(data) {
+       console.log(data);
+    });
+
+    socket.on('chathistory', function(data) {
+       console.log("iam here");
+       var messages  = document.getElementById('messages');
+       for (var i = 0; i < data.length; i++) {
+       	   console.log(data);
+       	   var chatuser = document.createElement("div");
+       	   chatuser.className = "chat-user";
+       	   var time = document.createElement("p");
+       	   time.className = "chat-time";
+       	   var name = document.createElement("div");
+       	   name.className = "chat-name";
+       	   var msg = document.createElement("p");
+       	   msg.className = "chat-msg";
+      	   time.innerHTML = data[i].timestamp;
+      	   name.innerHTML = data[i].username;
+      	   msg.innerHTML = data[i].message;
+      	   messages.appendChild(time);
+      	   chatuser.appendChild(name);
+      	   chatuser.appendChild(msg);
+      	   messages.appendChild(chatuser);
+      	console.log(messages);
+       }
+       messages.scrollTop = messages.scrollHeight;
+    });
+
+   
+
+    socket.on('new_message', function (user, data, date) {
+      console.log(user, 'says', data, date);
+      var messages  = document.getElementById('messages');
+      var chatuser = document.createElement("div");
+      chatuser.className = "chat-user";
+      var time = document.createElement("p");
+      time.className = "chat-time";
+      var name = document.createElement("div");
+      name.className = "chat-name";
+      var msg = document.createElement("p");
+      msg.className = "chat-msg";
+      time.innerHTML = date;
+      name.innerHTML = user;
+      msg.innerHTML = data;
+      messages.appendChild(time);
+      chatuser.appendChild(name);
+      chatuser.appendChild(msg);
+      messages.appendChild(chatuser);
+      messages.scrollTop = messages.scrollHeight;
+    });
+
+
+    function sendMessage() {
+      var message  = document.getElementById('msg');
+      socket.emit("new_message", message.value);
+      document.getElementById('msg').value = '';
+    }

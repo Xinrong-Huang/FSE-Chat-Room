@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+  body.index
+    block content
+      div.register
+        p#header #{title}
+        br
+        form(action="/", method="POST")
+          input(name="userid", type="username", placeholder="Enter your username")
+          br
+          input(name="userpwd", type="password", placeholder="Enter your password")
+          br
+          input(type="submit", value="Register")
