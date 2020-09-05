@@ -3,12 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-// var http = require("http"); 
-// var socketio = require("socket.io"); 
 
 var app = express();
-// var server = require('http').Server(app);
-// var io = require('socket.io')(server);
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
@@ -63,19 +59,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// add headers
-// app.use(function(req, res, next) {
-//   res.setHeaders("Access-Control-Allow-Origin", "*");
-//   next();
-// });
-
-// app.get("/chat", function(req, res) {
-// 	console.log('history--------');
-// 	connection.query("SELECT * FROM Messages", function (err, messages) {
-// 		res.send(JSON.stringify(messages));
-// 	});
-// });
-
 io.on('connection', (socket)=>{
   console.log('New user connected', socket.id);
 
@@ -89,18 +72,9 @@ io.on('connection', (socket)=>{
   	console.log("history");
   	socket.emit("chathistory", messages);
   	// socket.on('chathistory', function(messages) {
-  	// 	console.lot("yoyoyoyoyo");
   	// 	io.emit("chathistory", messages);
   	// });
   });
-
-   // $.ajax({
-   //  	url: server + "/chat",
-   //  	method: "GET",
-   //  	success: function(response) {
-   //  		console.log(response);
-   //  	}
-   //  });
   
   users[client] = app.locals.username[Object.keys(users).length];
 
@@ -119,11 +93,8 @@ io.on('connection', (socket)=>{
 		time = usDate.toISOString().split('T')[1];
 	time = time.split('.')[0];
 	var timestamp = date+' '+time;
- //  	for(var key in users) {
-	//    console.log(key + " : " + users[key]);
-	// }
+
     console.log(users[current_client], 'client says', newMessage, timestamp); 
-    // io.emit("new_message", users[current_client], newMessage, timestamp);
     socket.emit('new_message', 'me', newMessage, timestamp);
     socket.broadcast.emit('new_message', users[current_client], newMessage, timestamp);
 
