@@ -8,9 +8,15 @@ var connection = mysql.createConnection({
   password : 'Password',
   database : 'chatroom'
 });
- 
+
 connection.connect();
 
+/**
+ * Render the register page.
+ *
+ * @name Register page
+ * @route {GET} /register
+ */
 router.get('/', function(req, res, next) {
   res.render('register', { title: 'FSE Chat Room Register' });
 });
